@@ -1,0 +1,5 @@
+# Une personne par ligne, sans point-virgule.
+Amadou Diallo
+Fatou Ndiaye
+Claire Martin
+Jean Dupont
