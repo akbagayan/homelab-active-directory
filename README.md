@@ -162,42 +162,6 @@ Après l’autorisation, actualiser la console DHCP et vérifier que les branche
 
 Le script [`scripts/New-LabADUsers.ps1`](scripts/New-LabADUsers.ps1) lit un fichier texte contenant une personne par ligne :
 
-```text
-Amadou Diallo
-Fatou Ndiaye
-Claire Martin
-Jean Dupont
-```
-
-Aucun point-virgule n’est nécessaire. Le premier mot est utilisé comme prénom et le reste de la ligne comme nom.
-
-### Utilisation recommandée
-
-Ouvrir PowerShell avec un compte autorisé, puis exécuter :
-
-```powershell
-Import-Module ActiveDirectory
-Set-Location C:\Chemin\du\projet
-.\scripts\New-LabADUsers.ps1 -InputFile .\users.txt -TargetOU "OU=_USERS,DC=bagayan,DC=local" -WhatIf
-```
-
-Après vérification du résultat simulé, retirer `-WhatIf` :
-
-```powershell
-.\scripts\New-LabADUsers.ps1 -InputFile .\users.txt -TargetOU "OU=_USERS,DC=bagayan,DC=local"
-```
-
-Le script demande le mot de passe de manière masquée et gère les identifiants déjà utilisés.
-
-> [!WARNING]
-> Pour les besoins de certains tests, un mot de passe temporaire peut apparaître en clair dans un exemple ou une ancienne version du script. Cette pratique est limitée à un environnement de laboratoire isolé. N’utilisez jamais ce mot de passe en production et remplacez-le après les essais.
-
-N’utilisez pas `Set-ExecutionPolicy Unrestricted`. Si l’exécution est bloquée, préférez une politique limitée au processus :
-
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
-
 ## 7. Préparer le client Windows 11
 
 1. connecter `CLIENT1` au réseau virtuel interne ;
