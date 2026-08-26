@@ -272,6 +272,22 @@ Le résultat attendu ressemble à `bagayan\aba`.
 - commencer avec `-WhatIf` ;
 - rechercher les doublons et les lignes vides.
 
+## Partie 2 — OU, groupes, partage SMB et GPO
+
+La suite du laboratoire couvre l’organisation des objets Active Directory, la gestion des droits par groupes, la création d’un partage de fichiers SMB et le déploiement d’un fond d’écran avec une GPO.
+
+➡️ **[Consulter le guide Active Directory — Version 2](docs/active-directory-v2.md)**
+
+Cette deuxième partie explique notamment :
+
+- la création de l’OU `_ENGINEERING` ;
+- la création du groupe de sécurité `FilePartagerEngenieur` ;
+- les permissions SMB et NTFS ;
+- les tests d’accès autorisé et refusé ;
+- le mappage d’un lecteur réseau ;
+- la création de la GPO `ImageDeFondEngenieur` ;
+- les commandes `gpupdate`, `gpresult` et `whoami /groups`.
+
 ## Glossaire
 
 | Sigle | Signification | Rôle simplifié |
