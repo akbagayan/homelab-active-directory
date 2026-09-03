@@ -333,3 +333,292 @@ Cette deuxième partie explique notamment :
 
 Les noms, comptes et mots de passe employés dans ce projet sont fictifs et réservés aux tests. Adaptez les adresses, les politiques de mot de passe, les délégations et l’architecture avant toute utilisation réelle.
 
+---
+
+## Partie 3 — Déploiement d’un SIEM avec Wazuh
+
+Cette troisième partie poursuit le HomeLab en ajoutant une couche de supervision et de détection. Elle ne reprend pas le déploiement Active Directory : les machines déjà présentes deviennent des actifs supervisés par Wazuh.
+
+### Objectifs
+
+- déployer Wazuh avec Docker sur un serveur Ubuntu ;
+- comprendre le rôle du Manager, de l’Indexer, du Dashboard et des agents ;
+- superviser un hôte Windows et un serveur Ubuntu ;
+- inventorier les services exposés avec Nmap dans un cadre autorisé ;
+- configurer le **File Integrity Monitoring (FIM)** ;
+- détecter la création d’un fichier en temps réel ;
+- rechercher et interpréter des événements de sécurité Windows ;
+- relier une alerte à son agent, son utilisateur, sa cible et son contexte.
+
+### Architecture SIEM observée
+
+| Composant | Adresse | Rôle |
+|---|---:|---|
+| Serveur Ubuntu / SRV-WAZUH | `172.16.0.60` | Docker, Wazuh Manager, Indexer, Dashboard et agent local |
+| Hôte Windows `DC` | `172.16.0.1` | Actif supervisé et source d’événements Windows |
+| Machine Kali | `172.16.0.61` | Validation réseau et génération contrôlée de télémétrie |
+| Réseau du laboratoire | `172.16.0.0/16` | Communication entre le SIEM, les agents et la machine de test |
+
+### Chaîne de traitement comprise
+
+1. Une activité se produit sur un poste ou un serveur.
+2. L’agent Wazuh collecte les journaux et informations utiles.
+3. Le Manager décode les événements et applique ses règles.
+4. L’Indexer conserve les données et permet leur recherche.
+5. Le Dashboard restitue les alertes et le contexte d’investigation.
+
+> [!WARNING]
+> Les scans Nmap présentés ci-dessous sont réalisés uniquement dans un laboratoire autorisé. Un port ouvert n’est pas automatiquement une vulnérabilité, et un résultat négatif de `--script vuln` ne prouve pas qu’un système est exempt de vulnérabilités.
+
+### Captures et déroulement du laboratoire
+
+<details>
+<summary><strong>1 — Préparation du serveur, Docker et Wazuh</strong></summary>
+
+#### 1. Adresse réseau du serveur Ubuntu Wazuh
+
+<img src="docs/siem-wazuh/images/01-reseau-serveur-wazuh.webp" alt="Adresse réseau du serveur Ubuntu Wazuh" width="900">
+
+#### 2. Test de connectivité vers l’hôte Windows
+
+<img src="docs/siem-wazuh/images/02-connectivite-hote-windows.webp" alt="Test de connectivité vers l’hôte Windows" width="900">
+
+#### 3. Ajout de la clé et du dépôt Docker
+
+<img src="docs/siem-wazuh/images/03-depot-docker.webp" alt="Ajout de la clé et du dépôt Docker" width="900">
+
+#### 4. Installation de Docker Engine et Compose
+
+<img src="docs/siem-wazuh/images/04-installation-docker.webp" alt="Installation de Docker Engine et Compose" width="900">
+
+#### 5. Vérification du service Docker
+
+<img src="docs/siem-wazuh/images/05-service-docker.webp" alt="Vérification du service Docker" width="900">
+
+#### 6. Réglage de vm.max_map_count
+
+<img src="docs/siem-wazuh/images/06-vm-max-map-count.webp" alt="Réglage de vm.max_map_count" width="900">
+
+#### 7. Installation de Git
+
+<img src="docs/siem-wazuh/images/07-installation-git.webp" alt="Installation de Git" width="900">
+
+#### 8. Clonage de wazuh-docker v4.14.7
+
+<img src="docs/siem-wazuh/images/08-clone-wazuh-docker.webp" alt="Clonage de wazuh-docker v4.14.7" width="900">
+
+#### 9. Contrôle de l’arborescence Wazuh
+
+<img src="docs/siem-wazuh/images/09-arborescence-wazuh.webp" alt="Contrôle de l’arborescence Wazuh" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>2 — Accès au Dashboard et contrôles de santé</strong></summary>
+
+#### 10. Page de connexion Wazuh
+
+<img src="docs/siem-wazuh/images/10-connexion-wazuh.webp" alt="Page de connexion Wazuh" width="900">
+
+#### 11. Authentification administrateur
+
+<img src="docs/siem-wazuh/images/11-authentification-wazuh.webp" alt="Authentification administrateur" width="900">
+
+#### 12. Contrôles de santé de la plateforme
+
+<img src="docs/siem-wazuh/images/12-health-check.webp" alt="Contrôles de santé de la plateforme" width="900">
+
+#### 13. Tableau de bord avant l’ajout des agents
+
+<img src="docs/siem-wazuh/images/13-dashboard-initial.webp" alt="Tableau de bord avant l’ajout des agents" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>3 — Enregistrement des agents Windows et Ubuntu</strong></summary>
+
+#### 14. Agent Windows actif dans Wazuh
+
+<img src="docs/siem-wazuh/images/14-agent-windows.webp" alt="Agent Windows actif dans Wazuh" width="900">
+
+#### 15. Détails et inventaire de l’agent Windows
+
+<img src="docs/siem-wazuh/images/15-details-agent-windows.webp" alt="Détails et inventaire de l’agent Windows" width="900">
+
+#### 16. Installation de l’agent sur Ubuntu
+
+<img src="docs/siem-wazuh/images/16-installation-agent-ubuntu.webp" alt="Installation de l’agent sur Ubuntu" width="900">
+
+#### 17. Deux agents actifs dans le SIEM
+
+<img src="docs/siem-wazuh/images/17-deux-agents-actifs.webp" alt="Deux agents actifs dans le SIEM" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>4 — Découverte réseau et validation avec Nmap</strong></summary>
+
+#### 18. Adresse IP de la machine Kali
+
+<img src="docs/siem-wazuh/images/18-adresse-kali.webp" alt="Adresse IP de la machine Kali" width="900">
+
+#### 19. Scan TCP SYN de l’hôte Windows
+
+<img src="docs/siem-wazuh/images/19-scan-syn-windows.webp" alt="Scan TCP SYN de l’hôte Windows" width="900">
+
+#### 20. Détection des versions de services
+
+<img src="docs/siem-wazuh/images/20-detection-versions.webp" alt="Détection des versions de services" width="900">
+
+#### 21. Estimation du système d’exploitation
+
+<img src="docs/siem-wazuh/images/21-detection-os.webp" alt="Estimation du système d’exploitation" width="900">
+
+#### 22. Scan avancé de l’hôte Windows
+
+<img src="docs/siem-wazuh/images/22-scan-avance.webp" alt="Scan avancé de l’hôte Windows" width="900">
+
+#### 23. Informations TLS et certificat
+
+<img src="docs/siem-wazuh/images/23-informations-tls.webp" alt="Informations TLS et certificat" width="900">
+
+#### 24. Scan ciblé des ports UDP
+
+<img src="docs/siem-wazuh/images/24-scan-udp.webp" alt="Scan ciblé des ports UDP" width="900">
+
+#### 25. Scan ciblé des services principaux
+
+<img src="docs/siem-wazuh/images/25-scan-ports-cibles.webp" alt="Scan ciblé des services principaux" width="900">
+
+#### 26. Scripts Nmap de vulnérabilité
+
+<img src="docs/siem-wazuh/images/26-scripts-vulnerabilites.webp" alt="Scripts Nmap de vulnérabilité" width="900">
+
+#### 27. Scan complet du serveur Wazuh
+
+<img src="docs/siem-wazuh/images/27-scan-complet-wazuh.webp" alt="Scan complet du serveur Wazuh" width="900">
+
+#### 28. Empreintes des services Wazuh
+
+<img src="docs/siem-wazuh/images/28-empreintes-services.webp" alt="Empreintes des services Wazuh" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>5 — Configuration avancée et surveillance FIM</strong></summary>
+
+#### 29. État des conteneurs Wazuh
+
+<img src="docs/siem-wazuh/images/29-conteneurs-wazuh.webp" alt="État des conteneurs Wazuh" width="900">
+
+#### 30. Ouverture d’un shell dans le manager
+
+<img src="docs/siem-wazuh/images/30-shell-manager.webp" alt="Ouverture d’un shell dans le manager" width="900">
+
+#### 31. Installation d’un éditeur dans le conteneur
+
+<img src="docs/siem-wazuh/images/31-editeur-conteneur.webp" alt="Installation d’un éditeur dans le conteneur" width="900">
+
+#### 32. Options globales de journalisation
+
+<img src="docs/siem-wazuh/images/32-journalisation-wazuh.webp" alt="Options globales de journalisation" width="900">
+
+#### 33. Configuration du File Integrity Monitoring
+
+<img src="docs/siem-wazuh/images/33-configuration-fim.webp" alt="Configuration du File Integrity Monitoring" width="900">
+
+#### 34. Redémarrage et contrôle de l’agent
+
+<img src="docs/siem-wazuh/images/34-redemarrage-agent.webp" alt="Redémarrage et contrôle de l’agent" width="900">
+
+#### 35. Création d’un premier fichier de test
+
+<img src="docs/siem-wazuh/images/35-fichier-test.webp" alt="Création d’un premier fichier de test" width="900">
+
+#### 36. Création de important.txt dans /root
+
+<img src="docs/siem-wazuh/images/36-fichier-important.webp" alt="Création de important.txt dans /root" width="900">
+
+#### 37. Recherche dans wazuh-alerts-*
+
+<img src="docs/siem-wazuh/images/37-recherche-alertes.webp" alt="Recherche dans wazuh-alerts-*" width="900">
+
+#### 38. Détail de l’événement FIM
+
+<img src="docs/siem-wazuh/images/38-evenement-fim.webp" alt="Détail de l’événement FIM" width="900">
+
+#### 39. Chronologie des événements
+
+<img src="docs/siem-wazuh/images/39-chronologie-evenements.webp" alt="Chronologie des événements" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>6 — Collecte d’un événement de sécurité Windows</strong></summary>
+
+#### 40. Action utilisateur sur l’hôte Windows
+
+<img src="docs/siem-wazuh/images/40-action-utilisateur-windows.webp" alt="Action utilisateur sur l’hôte Windows" width="900">
+
+#### 41. Événement Windows 4722 remonté dans Wazuh
+
+<img src="docs/siem-wazuh/images/41-evenement-windows-4722.webp" alt="Événement Windows 4722 remonté dans Wazuh" width="900">
+
+</details>
+
+
+### Résultat du test FIM
+
+La création du fichier `/root/important.txt` produit un événement contenant notamment :
+
+- le chemin surveillé ;
+- l’agent ayant généré l’événement ;
+- le mode `realtime` ;
+- l’action `added` ;
+- les empreintes du fichier ;
+- la règle Wazuh correspondante.
+
+Cette validation démontre le parcours complet d’une donnée de sécurité : génération sur l’hôte, collecte par l’agent, traitement par Wazuh, indexation et recherche dans `wazuh-alerts-*`.
+
+### Interprétation de l’événement Windows
+
+La dernière séquence montre la remontée de l’**Event ID 4722**, associé à l’activation d’un compte utilisateur. Les champs Wazuh permettent d’identifier :
+
+- l’agent source ;
+- le compte cible ;
+- le compte ayant réalisé l’action ;
+- le domaine concerné ;
+- le journal Windows `Security` ;
+- l’horodatage de l’événement.
+
+Un événement isolé ne constitue pas automatiquement un incident. Il doit être comparé aux changements autorisés, à l’horaire, au poste source et aux événements voisins.
+
+### Bonnes pratiques retenues
+
+- remplacer le certificat non approuvé par un certificat adapté au nom DNS utilisé ;
+- changer les identifiants initiaux et protéger les comptes administrateurs ;
+- limiter les ports Wazuh aux sources strictement nécessaires ;
+- ne pas exposer inutilement l’Indexer ou l’API de gestion ;
+- rendre persistants les paramètres système et les configurations Docker ;
+- définir une politique de rétention et surveiller l’espace disque ;
+- limiter `logall`, `logall_json` et le FIM temps réel au périmètre utile ;
+- conserver une trace des scans et changements de test pour les distinguer d’un incident réel.
+
+### Vérifications finales
+
+- [ ] Docker est actif.
+- [ ] Les conteneurs Manager, Indexer et Dashboard sont démarrés.
+- [ ] Les contrôles de santé Wazuh réussissent.
+- [ ] Les agents Windows et Ubuntu apparaissent actifs.
+- [ ] L’événement FIM pour `/root/important.txt` est visible.
+- [ ] L’événement Windows 4722 contient les champs attendus.
+- [ ] Les alertes sont analysées avec leur contexte plutôt qu’avec leur seule sévérité.
+
+> [!IMPORTANT]
+> Cette architecture est conçue pour l’apprentissage. En production, il faut dimensionner les ressources, protéger les secrets et certificats, filtrer les flux, sauvegarder la configuration et définir un processus formel de traitement des alertes.
+
