@@ -333,6 +333,559 @@ Cette deuxième partie explique notamment :
 
 Les noms, comptes et mots de passe employés dans ce projet sont fictifs et réservés aux tests. Adaptez les adresses, les politiques de mot de passe, les délégations et l’architecture avant toute utilisation réelle.
 
+## Captures et déroulement du laboratoire Active Directory
+
+Cette galerie reprend les étapes du rapport complet dans le même ordre. Les groupes sont repliables afin de conserver un README lisible.
+
+> [!NOTE]
+> Deux captures PowerShell contenant un mot de passe de laboratoire en clair et une politique d’exécution `Unrestricted` ne sont pas publiées. En pratique, demandez le mot de passe avec `Read-Host -AsSecureString` et évitez `Unrestricted`.
+
+<details>
+<summary><strong>1 — Topologie et périmètre du laboratoire</strong></summary>
+
+#### 1. Topologie logique et plan d’adressage du HomeLab Active Directory
+
+<img src="docs/active-directory/images/001-figure-1-topologie-logique-et-plan-dadressage-du-homelab-active-director.webp" alt="Topologie logique et plan d’adressage du HomeLab Active Directory" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>2 — Installation d’AD DS et création de la forêt</strong></summary>
+
+#### 2. Sélection du serveur de destination nommé DC
+
+<img src="docs/active-directory/images/002-selection-du-serveur-de-destination-nomme-dc.webp" alt="Sélection du serveur de destination nommé DC" width="900">
+
+#### 3. Ajout des outils requis par le rôle AD DS
+
+<img src="docs/active-directory/images/003-ajout-des-outils-requis-par-le-role-ad-ds.webp" alt="Ajout des outils requis par le rôle AD DS" width="900">
+
+#### 4. Sélection du rôle Services de domaine Active Directory
+
+<img src="docs/active-directory/images/004-selection-du-role-services-de-domaine-active-directory.webp" alt="Sélection du rôle Services de domaine Active Directory" width="900">
+
+#### 5. Présentation du rôle AD DS dans l’assistant
+
+<img src="docs/active-directory/images/005-presentation-du-role-ad-ds-dans-lassistant.webp" alt="Présentation du rôle AD DS dans l’assistant" width="900">
+
+#### 6. Fin de l’installation du rôle AD DS
+
+<img src="docs/active-directory/images/006-fin-de-linstallation-du-role-ad-ds.webp" alt="Fin de l’installation du rôle AD DS" width="900">
+
+#### 7. Notification de post-déploiement
+
+<img src="docs/active-directory/images/007-notification-de-post-deploiement.webp" alt="Notification de post-déploiement" width="900">
+
+#### 8. Création d’une nouvelle forêt bagayan.local
+
+<img src="docs/active-directory/images/008-creation-dune-nouvelle-foret-bagayan-local.webp" alt="Création d’une nouvelle forêt bagayan.local" width="900">
+
+#### 9. Options du contrôleur de domaine
+
+<img src="docs/active-directory/images/009-options-du-controleur-de-domaine.webp" alt="Options du contrôleur de domaine" width="900">
+
+#### 10. Emplacements de la base AD, des journaux et de SYSVOL
+
+<img src="docs/active-directory/images/010-emplacements-de-la-base-ad-des-journaux-et-de-sysvol.webp" alt="Emplacements de la base AD, des journaux et de SYSVOL" width="900">
+
+#### 11. Vérification des prérequis avant promotion
+
+<img src="docs/active-directory/images/011-verification-des-prerequis-avant-promotion.webp" alt="Vérification des prérequis avant promotion" width="900">
+
+#### 12. Redémarrage automatique après la promotion
+
+<img src="docs/active-directory/images/012-redemarrage-automatique-apres-la-promotion.webp" alt="Redémarrage automatique après la promotion" width="900">
+
+#### 13. Première connexion avec le compte Administrateur du domaine
+
+<img src="docs/active-directory/images/013-premiere-connexion-avec-le-compte-administrateur-du-domaine.webp" alt="Première connexion avec le compte Administrateur du domaine" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>3 — Organisation de l’administration du domaine</strong></summary>
+
+#### 14. Création de l’unité d’organisation _ADMIN
+
+<img src="docs/active-directory/images/014-creation-de-lunite-dorganisation-admin.webp" alt="Création de l’unité d’organisation _ADMIN" width="900">
+
+#### 15. Commande Nouveau > Utilisateur dans l’OU _ADMIN
+
+<img src="docs/active-directory/images/015-commande-nouveau-utilisateur-dans-lou-admin.webp" alt="Commande Nouveau > Utilisateur dans l’OU _ADMIN" width="900">
+
+#### 16. Saisie de l’identité du compte administrateur délégué
+
+<img src="docs/active-directory/images/016-saisie-de-lidentite-du-compte-administrateur-delegue.webp" alt="Saisie de l’identité du compte administrateur délégué" width="900">
+
+#### 17. Définition du mot de passe du nouveau compte
+
+<img src="docs/active-directory/images/017-definition-du-mot-de-passe-du-nouveau-compte.webp" alt="Définition du mot de passe du nouveau compte" width="900">
+
+#### 18. Ajout d’un groupe dans l’onglet Membre de
+
+<img src="docs/active-directory/images/018-ajout-dun-groupe-dans-longlet-membre-de.webp" alt="Ajout d’un groupe dans l’onglet Membre de" width="900">
+
+#### 19. Compte ajouté au groupe Domain Admins
+
+<img src="docs/active-directory/images/019-compte-ajoute-au-groupe-domain-admins.webp" alt="Compte ajouté au groupe Domain Admins" width="900">
+
+#### 20. Test de connexion avec le nouvel administrateur
+
+<img src="docs/active-directory/images/020-test-de-connexion-avec-le-nouvel-administrateur.webp" alt="Test de connexion avec le nouvel administrateur" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>4 — Configuration de RRAS et du routage NAT</strong></summary>
+
+#### 21. Sélection du serveur avant l’installation d’Accès à distance
+
+<img src="docs/active-directory/images/021-selection-du-serveur-avant-linstallation-dacces-a-distance.webp" alt="Sélection du serveur avant l’installation d’Accès à distance" width="900">
+
+#### 22. Sélection du rôle Accès à distance
+
+<img src="docs/active-directory/images/022-selection-du-role-acces-a-distance.webp" alt="Sélection du rôle Accès à distance" width="900">
+
+#### 23. Ajout des fonctionnalités nécessaires au routage
+
+<img src="docs/active-directory/images/023-ajout-des-fonctionnalites-necessaires-au-routage.webp" alt="Ajout des fonctionnalités nécessaires au routage" width="900">
+
+#### 24. Sélection des services de rôle Routage et DirectAccess/VPN
+
+<img src="docs/active-directory/images/024-selection-des-services-de-role-routage-et-directaccess-vpn.webp" alt="Sélection des services de rôle Routage et DirectAccess/VPN" width="900">
+
+#### 25. Fin de l’installation d’Accès à distance
+
+<img src="docs/active-directory/images/025-fin-de-linstallation-dacces-a-distance.webp" alt="Fin de l’installation d’Accès à distance" width="900">
+
+#### 26. Ouverture de Routage et accès distant
+
+<img src="docs/active-directory/images/026-ouverture-de-routage-et-acces-distant.webp" alt="Ouverture de Routage et accès distant" width="900">
+
+#### 27. Lancement de l’assistant de configuration RRAS
+
+<img src="docs/active-directory/images/027-lancement-de-lassistant-de-configuration-rras.webp" alt="Lancement de l’assistant de configuration RRAS" width="900">
+
+#### 28. Choix du mode de configuration RRAS
+
+<img src="docs/active-directory/images/028-choix-du-mode-de-configuration-rras.webp" alt="Choix du mode de configuration RRAS" width="900">
+
+#### 29. Sélection de l’interface publique Internet
+
+<img src="docs/active-directory/images/029-selection-de-linterface-publique-internet.webp" alt="Sélection de l’interface publique Internet" width="900">
+
+#### 30. Fin de l’assistant RRAS
+
+<img src="docs/active-directory/images/030-fin-de-lassistant-rras.webp" alt="Fin de l’assistant RRAS" width="900">
+
+#### 31. État opérationnel du service RRAS
+
+<img src="docs/active-directory/images/031-etat-operationnel-du-service-rras.webp" alt="État opérationnel du service RRAS" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>5 — Installation et configuration de DHCP</strong></summary>
+
+#### 32. Sélection du rôle Serveur DHCP
+
+<img src="docs/active-directory/images/032-selection-du-role-serveur-dhcp.webp" alt="Sélection du rôle Serveur DHCP" width="900">
+
+#### 33. Confirmation de l’installation DHCP
+
+<img src="docs/active-directory/images/033-confirmation-de-linstallation-dhcp.webp" alt="Confirmation de l’installation DHCP" width="900">
+
+#### 34. Notification de configuration post-déploiement DHCP
+
+<img src="docs/active-directory/images/034-notification-de-configuration-post-deploiement-dhcp.webp" alt="Notification de configuration post-déploiement DHCP" width="900">
+
+#### 35. Assistant Nouvelle étendue IPv4
+
+<img src="docs/active-directory/images/035-assistant-nouvelle-etendue-ipv4.webp" alt="Assistant Nouvelle étendue IPv4" width="900">
+
+#### 36. Nom de l’étendue DHCP
+
+<img src="docs/active-directory/images/036-nom-de-letendue-dhcp.webp" alt="Nom de l’étendue DHCP" width="900">
+
+#### 37. Plage d’adresses 172.16.0.50 à 172.16.0.100
+
+<img src="docs/active-directory/images/037-plage-dadresses-172-16-0-50-a-172-16-0-100.webp" alt="Plage d’adresses 172.16.0.50 à 172.16.0.100" width="900">
+
+#### 38. Saisie éventuelle d’une exclusion DHCP
+
+<img src="docs/active-directory/images/038-saisie-eventuelle-dune-exclusion-dhcp.webp" alt="Saisie éventuelle d’une exclusion DHCP" width="900">
+
+#### 39. Écran d’exclusion DHCP laissé vide
+
+<img src="docs/active-directory/images/039-ecran-dexclusion-dhcp-laisse-vide.webp" alt="Écran d’exclusion DHCP laissé vide" width="900">
+
+#### 40. Durée du bail DHCP
+
+<img src="docs/active-directory/images/040-duree-du-bail-dhcp.webp" alt="Durée du bail DHCP" width="900">
+
+#### 41. Configuration de la passerelle par défaut
+
+<img src="docs/active-directory/images/041-configuration-de-la-passerelle-par-defaut.webp" alt="Configuration de la passerelle par défaut" width="900">
+
+#### 42. Configuration du domaine et des serveurs DNS
+
+<img src="docs/active-directory/images/042-configuration-du-domaine-et-des-serveurs-dns.webp" alt="Configuration du domaine et des serveurs DNS" width="900">
+
+#### 43. Configuration WINS
+
+<img src="docs/active-directory/images/043-configuration-wins.webp" alt="Configuration WINS" width="900">
+
+#### 44. Activation immédiate de l’étendue
+
+<img src="docs/active-directory/images/044-activation-immediate-de-letendue.webp" alt="Activation immédiate de l’étendue" width="900">
+
+#### 45. Confirmation du choix d’activation
+
+<img src="docs/active-directory/images/045-confirmation-du-choix-dactivation.webp" alt="Confirmation du choix d’activation" width="900">
+
+#### 46. Fin de l’assistant Nouvelle étendue
+
+<img src="docs/active-directory/images/046-fin-de-lassistant-nouvelle-etendue.webp" alt="Fin de l’assistant Nouvelle étendue" width="900">
+
+#### 47. Autorisation du serveur DHCP dans Active Directory
+
+<img src="docs/active-directory/images/047-autorisation-du-serveur-dhcp-dans-active-directory.webp" alt="Autorisation du serveur DHCP dans Active Directory" width="900">
+
+#### 48. Actualisation de la console DHCP
+
+<img src="docs/active-directory/images/048-actualisation-de-la-console-dhcp.webp" alt="Actualisation de la console DHCP" width="900">
+
+#### 49. Serveur DHCP autorisé et opérationnel
+
+<img src="docs/active-directory/images/049-serveur-dhcp-autorise-et-operationnel.webp" alt="Serveur DHCP autorisé et opérationnel" width="900">
+
+#### 50. Plage active dans le pool d’adresses
+
+<img src="docs/active-directory/images/050-plage-active-dans-le-pool-dadresses.webp" alt="Plage active dans le pool d’adresses" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>6 — Création des comptes et finalisation des services</strong></summary>
+
+#### 51. Gestion locale du serveur depuis Server Manager
+
+<img src="docs/active-directory/images/051-gestion-locale-du-serveur-depuis-server-manager.webp" alt="Gestion locale du serveur depuis Server Manager" width="900">
+
+#### 52. Ouverture de Windows PowerShell ISE
+
+<img src="docs/active-directory/images/052-ouverture-de-windows-powershell-ise.webp" alt="Ouverture de Windows PowerShell ISE" width="900">
+
+#### 55. Contrôle des comptes dans Utilisateurs et ordinateurs AD
+
+<img src="docs/active-directory/images/055-controle-des-comptes-dans-utilisateurs-et-ordinateurs-ad.webp" alt="Contrôle des comptes dans Utilisateurs et ordinateurs AD" width="900">
+
+#### 56. Contrôle des options du serveur DHCP
+
+<img src="docs/active-directory/images/056-controle-des-options-du-serveur-dhcp.webp" alt="Contrôle des options du serveur DHCP" width="900">
+
+#### 57. Redémarrage du service DHCP
+
+<img src="docs/active-directory/images/057-redemarrage-du-service-dhcp.webp" alt="Redémarrage du service DHCP" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>7 — Configuration et jonction du client Windows 11</strong></summary>
+
+#### 58. Résultat ipconfig sur le client
+
+<img src="docs/active-directory/images/058-resultat-ipconfig-sur-le-client.webp" alt="Résultat ipconfig sur le client" width="900">
+
+#### 59. Test de résolution et de connectivité vers bagayan.local
+
+<img src="docs/active-directory/images/059-test-de-resolution-et-de-connectivite-vers-bagayan-local.webp" alt="Test de résolution et de connectivité vers bagayan.local" width="900">
+
+#### 60. Test d’accès et de résolution Internet
+
+<img src="docs/active-directory/images/060-test-dacces-et-de-resolution-internet.webp" alt="Test d’accès et de résolution Internet" width="900">
+
+#### 61. Fenêtre de jonction à un domaine
+
+<img src="docs/active-directory/images/061-fenetre-de-jonction-a-un-domaine.webp" alt="Fenêtre de jonction à un domaine" width="900">
+
+#### 62. Authentification d’un administrateur pour la jonction
+
+<img src="docs/active-directory/images/062-authentification-dun-administrateur-pour-la-jonction.webp" alt="Authentification d’un administrateur pour la jonction" width="900">
+
+#### 63. Confirmation de l’entrée dans le domaine
+
+<img src="docs/active-directory/images/063-confirmation-de-lentree-dans-le-domaine.webp" alt="Confirmation de l’entrée dans le domaine" width="900">
+
+#### 64. Bail DHCP attribué à CLIENT1
+
+<img src="docs/active-directory/images/064-bail-dhcp-attribue-a-client1.webp" alt="Bail DHCP attribué à CLIENT1" width="900">
+
+#### 65. Objet ordinateur CLIENT1 dans Active Directory
+
+<img src="docs/active-directory/images/065-objet-ordinateur-client1-dans-active-directory.webp" alt="Objet ordinateur CLIENT1 dans Active Directory" width="900">
+
+#### 66. Ouverture de session du domaine sur Windows 11
+
+<img src="docs/active-directory/images/066-ouverture-de-session-du-domaine-sur-windows-11.webp" alt="Ouverture de session du domaine sur Windows 11" width="900">
+
+#### 67. Session ouverte avec un compte du domaine
+
+<img src="docs/active-directory/images/067-session-ouverte-avec-un-compte-du-domaine.webp" alt="Session ouverte avec un compte du domaine" width="900">
+
+#### 68. Validation avec la commande whoami
+
+<img src="docs/active-directory/images/068-validation-avec-la-commande-whoami.webp" alt="Validation avec la commande whoami" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>8 — Installation et configuration d’AD CS</strong></summary>
+
+#### 69. Sélection du rôle Active Directory Certificate Services
+
+<img src="docs/active-directory/images/069-selection-du-role-active-directory-certificate-services.webp" alt="Sélection du rôle Active Directory Certificate Services" width="900">
+
+#### 70. Ajout des fonctionnalités requises pour AD CS
+
+<img src="docs/active-directory/images/070-ajout-des-fonctionnalites-requises-pour-ad-cs.webp" alt="Ajout des fonctionnalités requises pour AD CS" width="900">
+
+#### 71. Présentation du rôle Active Directory Certificate Services
+
+<img src="docs/active-directory/images/071-presentation-du-role-active-directory-certificate-services.webp" alt="Présentation du rôle Active Directory Certificate Services" width="900">
+
+#### 72. Sélection du service de rôle Autorité de certification
+
+<img src="docs/active-directory/images/072-selection-du-service-de-role-autorite-de-certification.webp" alt="Sélection du service de rôle Autorité de certification" width="900">
+
+#### 73. Confirmation des options d’installation AD CS
+
+<img src="docs/active-directory/images/073-confirmation-des-options-dinstallation-ad-cs.webp" alt="Confirmation des options d’installation AD CS" width="900">
+
+#### 74. Progression de l’installation du rôle AD CS
+
+<img src="docs/active-directory/images/074-progression-de-linstallation-du-role-ad-cs.webp" alt="Progression de l’installation du rôle AD CS" width="900">
+
+#### 75. Notification de configuration post-déploiement AD CS
+
+<img src="docs/active-directory/images/075-notification-de-configuration-post-deploiement-ad-cs.webp" alt="Notification de configuration post-déploiement AD CS" width="900">
+
+#### 76. Sélection du compte utilisé pour configurer AD CS
+
+<img src="docs/active-directory/images/076-selection-du-compte-utilise-pour-configurer-ad-cs.webp" alt="Sélection du compte utilisé pour configurer AD CS" width="900">
+
+#### 77. Sélection du service AD CS à configurer
+
+<img src="docs/active-directory/images/077-selection-du-service-ad-cs-a-configurer.webp" alt="Sélection du service AD CS à configurer" width="900">
+
+#### 78. Choix du type Enterprise CA
+
+<img src="docs/active-directory/images/078-choix-du-type-enterprise-ca.webp" alt="Choix du type Enterprise CA" width="900">
+
+#### 79. Choix du type Root CA
+
+<img src="docs/active-directory/images/079-choix-du-type-root-ca.webp" alt="Choix du type Root CA" width="900">
+
+#### 80. Création d’une nouvelle clé privée pour la CA
+
+<img src="docs/active-directory/images/080-creation-dune-nouvelle-cle-privee-pour-la-ca.webp" alt="Création d’une nouvelle clé privée pour la CA" width="900">
+
+#### 81. Paramètres cryptographiques de l’autorité de certification
+
+<img src="docs/active-directory/images/081-parametres-cryptographiques-de-lautorite-de-certification.webp" alt="Paramètres cryptographiques de l’autorité de certification" width="900">
+
+#### 82. Définition du nom de l’autorité de certification
+
+<img src="docs/active-directory/images/082-definition-du-nom-de-lautorite-de-certification.webp" alt="Définition du nom de l’autorité de certification" width="900">
+
+#### 83. Définition de la période de validité de la CA
+
+<img src="docs/active-directory/images/083-definition-de-la-periode-de-validite-de-la-ca.webp" alt="Définition de la période de validité de la CA" width="900">
+
+#### 84. Emplacements de la base de données AD CS
+
+<img src="docs/active-directory/images/084-emplacements-de-la-base-de-donnees-ad-cs.webp" alt="Emplacements de la base de données AD CS" width="900">
+
+#### 85. Résumé de la configuration de l’autorité de certification
+
+<img src="docs/active-directory/images/085-resume-de-la-configuration-de-lautorite-de-certification.webp" alt="Résumé de la configuration de l’autorité de certification" width="900">
+
+#### 86. Résultat de la configuration de l’autorité de certification
+
+<img src="docs/active-directory/images/086-resultat-de-la-configuration-de-lautorite-de-certification.webp" alt="Résultat de la configuration de l’autorité de certification" width="900">
+
+</details>
+
+
+<details>
+<summary><strong>9 — OU, groupes, partage SMB, permissions NTFS et GPO</strong></summary>
+
+#### 87. Organisation des unités d’organisation du domaine
+
+<img src="docs/active-directory/images/087-organisation-des-unites-dorganisation-du-domaine.webp" alt="Organisation des unités d’organisation du domaine" width="900">
+
+#### 88. Création du groupe de sécurité FilePartagerEngenieur
+
+<img src="docs/active-directory/images/088-creation-du-groupe-de-securite-filepartagerengenieur.webp" alt="Création du groupe de sécurité FilePartagerEngenieur" width="900">
+
+#### 89. Sélection des utilisateurs du service ingénierie
+
+<img src="docs/active-directory/images/089-selection-des-utilisateurs-du-service-ingenierie.webp" alt="Sélection des utilisateurs du service ingénierie" width="900">
+
+#### 90. Choix du profil de partage SMB
+
+<img src="docs/active-directory/images/090-choix-du-profil-de-partage-smb.webp" alt="Choix du profil de partage SMB" width="900">
+
+#### 91. Sélection du serveur et du chemin du partage
+
+<img src="docs/active-directory/images/091-selection-du-serveur-et-du-chemin-du-partage.webp" alt="Sélection du serveur et du chemin du partage" width="900">
+
+#### 92. Définition du nom FilePartagerEngenieur
+
+<img src="docs/active-directory/images/092-definition-du-nom-filepartagerengenieur.webp" alt="Définition du nom FilePartagerEngenieur" width="900">
+
+#### 93. Configuration des options du partage SMB
+
+<img src="docs/active-directory/images/093-configuration-des-options-du-partage-smb.webp" alt="Configuration des options du partage SMB" width="900">
+
+#### 94. Ouverture de la configuration des permissions
+
+<img src="docs/active-directory/images/094-ouverture-de-la-configuration-des-permissions.webp" alt="Ouverture de la configuration des permissions" width="900">
+
+#### 95. Affichage des permissions NTFS héritées
+
+<img src="docs/active-directory/images/095-affichage-des-permissions-ntfs-heritees.webp" alt="Affichage des permissions NTFS héritées" width="900">
+
+#### 96. Blocage de l’héritage des permissions
+
+<img src="docs/active-directory/images/096-blocage-de-lheritage-des-permissions.webp" alt="Blocage de l’héritage des permissions" width="900">
+
+#### 97. Permissions explicites après conversion
+
+<img src="docs/active-directory/images/097-permissions-explicites-apres-conversion.webp" alt="Permissions explicites après conversion" width="900">
+
+#### 98. Suppression d’une permission trop large
+
+<img src="docs/active-directory/images/098-suppression-dune-permission-trop-large.webp" alt="Suppression d’une permission trop large" width="900">
+
+#### 99. Liste NTFS restreinte aux principaux nécessaires
+
+<img src="docs/active-directory/images/099-liste-ntfs-restreinte-aux-principaux-necessaires.webp" alt="Liste NTFS restreinte aux principaux nécessaires" width="900">
+
+#### 100. Ajout d’une nouvelle entrée de permission
+
+<img src="docs/active-directory/images/100-ajout-dune-nouvelle-entree-de-permission.webp" alt="Ajout d’une nouvelle entrée de permission" width="900">
+
+#### 101. Sélection du groupe FilePartagerEngenieur
+
+<img src="docs/active-directory/images/101-selection-du-groupe-filepartagerengenieur.webp" alt="Sélection du groupe FilePartagerEngenieur" width="900">
+
+#### 102. Attribution des droits au groupe d’ingénierie
+
+<img src="docs/active-directory/images/102-attribution-des-droits-au-groupe-dingenierie.webp" alt="Attribution des droits au groupe d’ingénierie" width="900">
+
+#### 103. Propriétés générales du partage
+
+<img src="docs/active-directory/images/103-proprietes-generales-du-partage.webp" alt="Propriétés générales du partage" width="900">
+
+#### 104. Synthèse des permissions de partage et NTFS
+
+<img src="docs/active-directory/images/104-synthese-des-permissions-de-partage-et-ntfs.webp" alt="Synthèse des permissions de partage et NTFS" width="900">
+
+#### 105. Confirmation des paramètres du nouveau partage
+
+<img src="docs/active-directory/images/105-confirmation-des-parametres-du-nouveau-partage.webp" alt="Confirmation des paramètres du nouveau partage" width="900">
+
+#### 106. Création réussie du partage SMB
+
+<img src="docs/active-directory/images/106-creation-reussie-du-partage-smb.webp" alt="Création réussie du partage SMB" width="900">
+
+#### 107. Connexion avec le compte Paul Kebre
+
+<img src="docs/active-directory/images/107-connexion-avec-le-compte-paul-kebre.webp" alt="Connexion avec le compte Paul Kebre" width="900">
+
+#### 108. Ouverture de session de Paul Kebre
+
+<img src="docs/active-directory/images/108-ouverture-de-session-de-paul-kebre.webp" alt="Ouverture de session de Paul Kebre" width="900">
+
+#### 109. Accès au partage FilePartagerEngenieur
+
+<img src="docs/active-directory/images/109-acces-au-partage-filepartagerengenieur.webp" alt="Accès au partage FilePartagerEngenieur" width="900">
+
+#### 110. Ouverture de Ce PC pour connecter un lecteur
+
+<img src="docs/active-directory/images/110-ouverture-de-ce-pc-pour-connecter-un-lecteur.webp" alt="Ouverture de Ce PC pour connecter un lecteur" width="900">
+
+#### 111. Assistant de connexion d’un lecteur réseau
+
+<img src="docs/active-directory/images/111-assistant-de-connexion-dun-lecteur-reseau.webp" alt="Assistant de connexion d’un lecteur réseau" width="900">
+
+#### 112. Lecteur réseau Z connecté au partage
+
+<img src="docs/active-directory/images/112-lecteur-reseau-z-connecte-au-partage.webp" alt="Lecteur réseau Z connecté au partage" width="900">
+
+#### 113. Connexion avec le compte Aba
+
+<img src="docs/active-directory/images/113-connexion-avec-le-compte-aba.webp" alt="Connexion avec le compte Aba" width="900">
+
+#### 114. Ouverture de session du compte Aba
+
+<img src="docs/active-directory/images/114-ouverture-de-session-du-compte-aba.webp" alt="Ouverture de session du compte Aba" width="900">
+
+#### 115. Refus d’accès au partage pour Aba
+
+<img src="docs/active-directory/images/115-refus-dacces-au-partage-pour-aba.webp" alt="Refus d’accès au partage pour Aba" width="900">
+
+#### 116. Fond d’écran destiné au département Ingénieur
+
+<img src="docs/active-directory/images/116-fond-decran-destine-au-departement-ingenieur.webp" alt="Fond d’écran destiné au département Ingénieur" width="900">
+
+#### 117. Présence du partage dans Server Manager
+
+<img src="docs/active-directory/images/117-presence-du-partage-dans-server-manager.webp" alt="Présence du partage dans Server Manager" width="900">
+
+#### 118. Copie du fichier d’image dans NETLOGON
+
+<img src="docs/active-directory/images/118-copie-du-fichier-dimage-dans-netlogon.webp" alt="Copie du fichier d’image dans NETLOGON" width="900">
+
+#### 119. Ouverture de la console Group Policy Management
+
+<img src="docs/active-directory/images/119-ouverture-de-la-console-group-policy-management.webp" alt="Ouverture de la console Group Policy Management" width="900">
+
+#### 120. Création d’une GPO liée à l’OU _ENGINEERING
+
+<img src="docs/active-directory/images/120-creation-dune-gpo-liee-a-lou-engineering.webp" alt="Création d’une GPO liée à l’OU _ENGINEERING" width="900">
+
+#### 121. Nom de la GPO ImageDeFondEngenieur
+
+<img src="docs/active-directory/images/121-nom-de-la-gpo-imagedefondengenieur.webp" alt="Nom de la GPO ImageDeFondEngenieur" width="900">
+
+#### 122. Sélection du paramètre Desktop Wallpaper
+
+<img src="docs/active-directory/images/122-selection-du-parametre-desktop-wallpaper.webp" alt="Sélection du paramètre Desktop Wallpaper" width="900">
+
+#### 123. Activation et configuration du fond d’écran
+
+<img src="docs/active-directory/images/123-activation-et-configuration-du-fond-decran.webp" alt="Activation et configuration du fond d’écran" width="900">
+
+#### 124. Nouvelle connexion de Paul Kebre
+
+<img src="docs/active-directory/images/124-nouvelle-connexion-de-paul-kebre.webp" alt="Nouvelle connexion de Paul Kebre" width="900">
+
+#### 125. Fond d’écran appliqué au département Ingénieur
+
+<img src="docs/active-directory/images/125-fond-decran-applique-au-departement-ingenieur.webp" alt="Fond d’écran appliqué au département Ingénieur" width="900">
+
+</details>
+
+
 ---
 
 ## Partie 3 — Déploiement d’un SIEM avec Wazuh
